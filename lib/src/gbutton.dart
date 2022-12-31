@@ -33,12 +33,14 @@ class GButton extends StatefulWidget {
   final String? semanticLabel;
   final GnavStyle? style;
   final double? textSize;
+  final Widget? topRightWidget;
 
   const GButton({
     Key? key,
     this.active,
     this.haptic,
     this.backgroundColor,
+    this.topRightWidget,
     required this.icon,
     this.iconColor,
     this.rippleColor,
@@ -75,41 +77,56 @@ class _GButtonState extends State<GButton> {
   Widget build(BuildContext context) {
     return Semantics(
       label: widget.semanticLabel ?? widget.text,
-      child: Button(
-        textSize: widget.textSize,
-        style: widget.style,
-        borderRadius: widget.borderRadius,
-        border: widget.border,
-        activeBorder: widget.activeBorder,
-        shadow: widget.shadow,
-        debug: widget.debug,
-        duration: widget.duration,
-        iconSize: widget.iconSize,
-        active: widget.active,
-        onPressed: () {
-          if (widget.haptic!) HapticFeedback.selectionClick();
-          widget.onPressed?.call();
-        },
-        padding: widget.padding,
-        margin: widget.margin,
-        gap: widget.gap,
-        color: widget.backgroundColor,
-        rippleColor: widget.rippleColor,
-        hoverColor: widget.hoverColor,
-        gradient: widget.backgroundGradient,
-        curve: widget.curve,
-        leading: widget.leading,
-        iconActiveColor: widget.iconActiveColor,
-        iconColor: widget.iconColor,
-        icon: widget.icon,
-        text: Text(
-          widget.text,
-          style: widget.textStyle ??
-              TextStyle(
-                fontWeight: FontWeight.w600,
-                color: widget.textColor,
+      child: Stack(
+        children: [
+          Container(
+            padding: widget.topRightWidget != null
+                ? EdgeInsets.only(right: 16)
+                : null,
+            child: Button(
+              textSize: widget.textSize,
+              style: widget.style,
+              borderRadius: widget.borderRadius,
+              border: widget.border,
+              activeBorder: widget.activeBorder,
+              shadow: widget.shadow,
+              debug: widget.debug,
+              duration: widget.duration,
+              iconSize: widget.iconSize,
+              active: widget.active,
+              onPressed: () {
+                if (widget.haptic!) HapticFeedback.selectionClick();
+                widget.onPressed?.call();
+              },
+              padding: widget.padding,
+              margin: widget.margin,
+              gap: widget.gap,
+              color: widget.backgroundColor,
+              rippleColor: widget.rippleColor,
+              hoverColor: widget.hoverColor,
+              gradient: widget.backgroundGradient,
+              curve: widget.curve,
+              leading: widget.leading,
+              iconActiveColor: widget.iconActiveColor,
+              iconColor: widget.iconColor,
+              icon: widget.icon,
+              text: Text(
+                widget.text,
+                style: widget.textStyle ??
+                    TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: widget.textColor,
+                    ),
               ),
-        ),
+            ),
+          ),
+          if (widget.topRightWidget != null)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: widget.topRightWidget!,
+            ),
+        ],
       ),
     );
   }
